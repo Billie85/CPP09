@@ -4,58 +4,105 @@
 #include <vector>
 #include <iostream>
 #include <map>
+#include <utility>
+#include <cstdlib>
+#include <string>
+#include <algorithm>
 
-std::map<std::string, std::string> CsvData(std::ifstream &file)
+void removeSpaces(std::string& str)
 {
-	std::map<std::string, std::string> Array;
+    std::string::iterator position = std::remove(str.begin(), str.end(), ' ');
+    str.erase(position, str.end());
+}
+
+bool FindMinus(std::string &str)
+{
+	std::string::iterator position = std::find(str.begin(), str.end(), '-');
+	if (position != str.end())
+	{
+		return false;//0
+	}
+	else
+		return true;//1
+}
+
+bool CheckDecimals(std::string &str)
+{
+		std::string::iterator position = std::find(str.begin(), str.end(), '.');
+		if (position != str.end())
+		{
+			return true;
+		}
+		else
+			return false;
+}
+
+std::map<std::string, double> CsvData(std::ifstream &file)
+{
+	std::map<std::string, double> Array;
 
 	if (file.is_open() == false)
+	{
 		std::cout << "Error: could not open file." << std::endl;
+		return Array;
+	}
 
 	std::string str;
 	std::string data;
+	double num = 0;
 	while(getline(file, str, ','))
 	{
 		getline(file, data, '\n');
-		Array[str] = data;
+		num = atof(data.c_str());
+		Array[str] = num;
 	}
 	file.close();
 	return(Array);
 }
 
-std::map<std::string, std::string> inputData(std::ifstream &file)
+void inputData(std::ifstream &file, std::map<std::string, double> CsvArray)
 {
-	std::map<std::string, std::string> Array;
-
 	if (file.is_open() == false)
+	{
 		std::cout << "Error: could not open file." << std::endl;
+		return;
+	}
 
 	std::string str;
 	std::string data;
+	double num = 0;
 	while(getline(file, str, '|'))
 	{
 		getline(file, data, '\n');
-		Array[str] = data;
+		removeSpaces(str);
+		if (FindMinus(data) == false)
+		{
+			std::cout << "Error: not a positive number." << std::endl;
+			continue;
+		}
+		std::map<std::string, double>::iterator find = CsvArray.find(str);
+		if (find != CsvArray.end())
+		{
+			num = atof(data.c_str());
+			std::cout << str << " => " << CsvArray[str] << " = " << CsvArray[str] * num << std::endl;
+		}
+		else
+		{
+			std::cout << "Error: bad input => " << str << std::endl;
+			//continue;
+		}
 	}
 	file.close();
-	return(Array);
 }
 
 int main(int argc, char *argv[])
 {
-	std::map<std::string, std::string> InputArray;
-	std::map<std::string, std::string> CsvArray;
-	std::string str;
+	std::string InputArray;
+	std::map<std::string, double> CsvArray;
 	std::ifstream file1(argv[1]);
 	std::ifstream file2("data.csv");
-	InputArray = inputData(file1);
 	CsvArray = CsvData(file2);
-
-	//first secondはstd::pairのメンバーですが、std::mapの要素にstd::pairが使われている。
-	//そしてstd::mapの要素にアクセスするにはiteratorが必要
-	for (std::map<std::string, std::string>::iterator i = InputArray.begin(); i != InputArray.end(); i++)
-{
-     std::cout << i->first << "=>" << i->second << std::endl;
-}
+	inputData(file1, CsvArray);
 	return 0;
 }
+
