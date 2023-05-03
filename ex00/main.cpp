@@ -9,6 +9,11 @@
 #include <string>
 #include <algorithm>
 
+//やるべきことリスト
+//現在上手く行ってない場所として、もしもパイプとかがないとき次のパイプのある処理が認識されない。
+//int と double	の時の処理が必要。<-ここを完成させる。
+//同じ日付が2つ以上あった場合対応させるべきなのか？
+
 void removeSpaces(std::string& str)
 {
     std::string::iterator position = std::remove(str.begin(), str.end(), ' ');
@@ -70,26 +75,32 @@ void inputData(std::ifstream &file, std::map<std::string, double> CsvArray)
 
 	std::string str;
 	std::string data;
-	double num = 0;
+	int numInt = 0;
+	double numDouble = 0;
 	while(getline(file, str, '|'))
 	{
 		getline(file, data, '\n');
 		removeSpaces(str);
-		if (FindMinus(data) == false)
+		if (FindMinus(data) == false)//マイナスがあったら。
 		{
 			std::cout << "Error: not a positive number." << std::endl;
 			continue;
 		}
 		std::map<std::string, double>::iterator find = CsvArray.find(str);
-		if (find != CsvArray.end())
+		if (CheckDecimals(data) == false && find != CsvArray.end())//少数じゃない。&& キーがなかった場合
 		{
-			num = atof(data.c_str());
-			std::cout << str << " => " << CsvArray[str] << " = " << CsvArray[str] * num << std::endl;
+			numInt = atoi(data.c_str());
+			std::cout << str << " => " << CsvArray[str] << " = " << CsvArray[str] * numInt << std::endl;
 		}
-		else
+		if (CheckDecimals(data) == true && find != CsvArray.end())//少数。&& キーがなかった場合
+		{
+			numDouble = atof(data.c_str());
+			std::cout << str << " => " << CsvArray[str] << " = " << CsvArray[str] * numDouble << std::endl;
+		}
+		if (find == CsvArray.end())
 		{
 			std::cout << "Error: bad input => " << str << std::endl;
-			//continue;
+			continue;
 		}
 	}
 	file.close();
