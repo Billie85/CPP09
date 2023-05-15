@@ -13,13 +13,14 @@
 #include <map>
 #include <queue>
 #include <ctime>
+#include <iomanip>
 
-/* template <typename T>
+	template <typename T>
 void Sort(T start, int len)
 {
 	if (len <= 1)
 		return ;
-	std::vector<int>::iterator mid = start + len / 2;
+	T mid = start + len / 2;
 	Sort(start, len / 2);
 	Sort(mid, len / 2 + len % 2);
 	for (int i = len / 2; i < len; i++)
@@ -30,41 +31,75 @@ void Sort(T start, int len)
 		}
 	}
 	return ;
-} */
+}
+
+	template <typename T>
+void print(T start, T end, std::string str)
+{
+	if (str == "Before")
+	{
+		std::cout << "Before: ";
+		for (T it = start; it != end; it++)
+		{
+			std::cout << *it << " ";
+		}
+		std::cout << std::endl;
+	}
+	else if (str == "After")
+	{
+		std::cout << "After:  ";
+		for (T it = start; it != end; it++)
+		{
+			std::cout << *it << " ";
+		}
+		std::cout << std::endl;
+	}
+}
+
+void VecPart(std::stringstream &ss)
+{
+	int tmp = 0;
+	std::vector<int> VecStr;
+	while(ss >> tmp)
+	{
+		VecStr.push_back(tmp);
+	}
+	std::vector<int>::iterator start = VecStr.begin();
+	print(VecStr.begin(), VecStr.end(), "Before");
+	clock_t  STimeVec = clock();
+	Sort(start, VecStr.size());
+	clock_t  ETimeVec = clock();
+	double Total = (double)(ETimeVec - STimeVec) / CLOCKS_PER_SEC;//戻り値が整数だからdoubleにしてあげる必要がある。
+	print(VecStr.begin(), VecStr.end(), "After");
+	std::cout << "Time to process a range of " << VecStr.size() << " elements with std::[..] : " << std::fixed << std::setprecision(6) << Total << " us" << std::endl;
+}
+
+void DeqPart(std::stringstream &ss)
+{
+	int tmp = 0;
+	std::deque<int> VecStr;
+	while(ss >> tmp)
+	{
+		VecStr.push_back(tmp);
+	}
+	std::deque<int>::iterator start = VecStr.begin();
+	//print(VecStr.begin(), VecStr.end(), "Before");
+	clock_t  STimeVec = clock();
+	Sort(start, VecStr.size());
+	clock_t  ETimeVec = clock();
+	double Total = (double)(ETimeVec - STimeVec) / CLOCKS_PER_SEC;//戻り値が整数だからdoubleにしてあげる必要がある。
+	//print(VecStr.begin(), VecStr.end(), "After");
+	std::cout << "Time to process a range of " << VecStr.size() << " elements with std::[..] : " << std::fixed << std::setprecision(6) << Total << " us" << std::endl;
+}
 
 int main(int argc, char * argv[])
 {
-	/* std::stringstream ss(argv[1]);
-	int tmp = 0; */
-	std::vector<int> str;
-	/* while(ss >> tmp)
-	{
-		str.push_back(tmp);
-	} */
-	//std::vector<int>::iterator start = str.begin();
-	/* std::cout << "Before: ";
-	for (std::vector<int>::iterator it = str.begin(); it != str.end(); it++)
-	{
-		std::cout << *it << " ";
-	} */
-	//std::cout << std::endl;
-	clock_t  StartTime = clock();
-	//std::cout << "Start Time " << StartTime << std::endl;
-	int count = 5;
-    for (size_t i = 0; i < count; i++)
-	{
-		std::cout << "hello" << std::endl;
-	}
-	//Sort(start, str.size());
-	clock_t  EndTime = clock();
-	//std::cout << "End Time " << EndTime << std::endl;
-	double Total = (EndTime - StartTime) / CLOCKS_PER_SEC;
-	std::cout << "Total is " << Total << std::endl;
-	/* std::cout << "After:  ";
-	for (std::vector<int>::iterator it = str.begin(); it != str.end(); it++)
-	{
-		std::cout << *it << " ";
-	}
-	std::cout << std::endl; */
-	std::cout << "Time to process a range of " << str.size() << " elements with std::[..] : " <<  Total  << " us" << std::endl;
+	std::stringstream ss(argv[1]);
+	VecPart(ss);
+	DeqPart(ss);
+	return 0;
 }
+
+//疑問に思ってること、Deqの部分で出力をすると表示されない。
+//`shuf -i 1-100000 -n 3000 | tr "\n" " "`　に対応できてない。SPの問題かも。
+//マイナスのエラー処理未対応
