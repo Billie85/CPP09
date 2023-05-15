@@ -1,28 +1,17 @@
-#include <algorithm>
 #include <iostream>
-#include <cstdlib>
-#include <utility>
-#include <fstream>
-#include <sstream>
-#include <climits>
-#include <string>
-#include <vector>
-#include <string>
-#include <cctype> 
-#include <cfloat>
-#include <map>
-#include <queue>
+#include <ctime>
 
-int main(int argc, char * argv[])
-{
-	std::vector<int> str = {1, 5 ,7, 8};
-	/* for (int i = 0; i < str.size(); i++)
+int main() {
+    std::clock_t start = std::clock();
+	std::cout << "Start Time " << start << std::endl;
+	int count = 5;
+    for (size_t i = 0; i < count; i++)
 	{
-		std::cout << str[i] << std::endl;
-	} */
-	std::vector<int>::iterator it;
-	for (it = str.begin(); it != str.end(); ++it)
-	{
-		std::cout << *it << std::endl;
+		std::cout << "hello" << std::endl;
 	}
+    std::clock_t end = std::clock();
+	std::cout << "End Time " << end << std::endl;
+    double elapsed_time = (end - start) / static_cast<double>(CLOCKS_PER_SEC);
+    std::cout << "経過時間: " << elapsed_time << "秒" << std::endl;
+    return 0;
 }
