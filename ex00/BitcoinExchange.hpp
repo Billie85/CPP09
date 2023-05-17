@@ -23,5 +23,6 @@ bool FindMinus(std::string &str);
 bool CheckDecimals(std::string &str);
 std::map<std::string, float> CsvData(std::ifstream &file);
 void inputData(std::ifstream &file, std::map<std::string, float> CsvArray);
-
+void FloatPart(std::string &str, std::map<std::string, float> CsvArray);
+void IntPart(std::string &str, std::map<std::string, float> CsvArray);
 #endif

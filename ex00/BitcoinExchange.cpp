@@ -1,16 +1,5 @@
 #include "BitcoinExchange.hpp"
 
-//対応していないエラー
-//アルファベットが入ってきたときのエラーは対応しなくていいと思ってるなぜならfloatの最大値とかにアルファベットが入ってて、対応したら最大値とかが出来なくなる。
-//うるう年とかのエラーが対応していない。->必要ないと思ってる。
-//floatをfloatに変換する。pdfに指定あり。
-
-
-//質問内容INT_MIN INT_MAXに対応はしてないけど引数で渡すと上手く行く。
-//マイナスが来た時の処理が甘い。not positive number になるべき。
-//少数の時もそうでないときもfloatにしてる。なら小数点がある時ない時で分ける必要性ないかも...
-//コードが汚い。
-
 void removeSpaces(std::string& str)
 {
     std::string::iterator position = std::remove(str.begin(), str.end(), ' ');
@@ -39,6 +28,7 @@ bool CheckDecimals(std::string &str)
 			return false;
 }
 
+//実際のデータ。
 std::map<std::string, float> CsvData(std::ifstream &file)
 {
 	std::map<std::string, float> Array;
@@ -48,7 +38,6 @@ std::map<std::string, float> CsvData(std::ifstream &file)
 		std::cout << "Error: could not open file." << std::endl;
 		return Array;
 	}
-
 	std::string str;
 	std::string data;
 	float num = 0;
@@ -62,7 +51,39 @@ std::map<std::string, float> CsvData(std::ifstream &file)
 	return(Array);
 }
 
+void IntPart(std::string &str, std::map<std::string, float> CsvArray, std::string data)
+{
+	std::map<std::string, float>::iterator find = CsvArray.find(str);//実際のデータの情報
+	if (find != CsvArray.end())//キーがある場合。
+		{
+			int num = atoi(data.c_str());
+			float n = CsvArray[str] * num;
+			if (num >= 1000)
+				std::cout << "Error: too large a number. "<< std::endl;
+			else if (num < 0)
+				std::cout << "Error: not a positive number." << std::endl;
+			else
+				std::cout << str << " => " << num << " = " << n << std::endl;
+		}
+}
 
+void FloatPart(std::string &str, std::map<std::string, float> CsvArray, std::string data)
+{
+	std::map<std::string, float>::iterator find = CsvArray.find(str);//実際のデータの情報
+	if (find != CsvArray.end())//キーがある場合。
+		{
+			float num = atof(data.c_str());
+			float d = CsvArray[str] * num;
+			if (num >= 1000)
+				std::cout << "Error: too large a number. "<< std::endl;
+			else if (num <= 0)
+				std::cout << "Error: not a positive number." << std::endl;
+			else
+				std::cout << str << " => " << num << " = " << d << std::endl;
+		}
+}
+
+//検索するデータ
 void inputData(std::ifstream &file, std::map<std::string, float> CsvArray)
 {
 	if (file.is_open() == false)
@@ -70,8 +91,6 @@ void inputData(std::ifstream &file, std::map<std::string, float> CsvArray)
 		std::cout << "Error: could not open file." << std::endl;
 		return;
 	}
-	int numInt = 0;
-	float numfloat = 0;
 	std::string ignoredLine;
 	getline(file, ignoredLine);
 
@@ -79,46 +98,20 @@ void inputData(std::ifstream &file, std::map<std::string, float> CsvArray)
 	std::string data;
 	while(getline(file, str))
 	{
-		std::stringstream ss;//常に初期化してあげる。
+		std::stringstream ss;//初期化忘れずに
 		ss << str;
 		getline(ss, str, '|');
 		getline(ss, data, '\n');
 		removeSpaces(str);
-		std::map<std::string, float>::iterator find = CsvArray.find(str);
-		if (CheckDecimals(data) == false && find != CsvArray.end())//少数じゃない。&& キーがある場合。
-		{
-			numInt = atoi(data.c_str());
-			float n = CsvArray[str] * numInt;
-			if (n <= FLT_MIN || n >= FLT_MAX)
-			{
-				std::cout << "Error: too large a number. ->"<< n << std::endl;
-				continue;
-			}
-			else
-				std::cout << str << " => " << numInt << " = " << n << std::endl;
-		}
-		if (CheckDecimals(data) == true && find != CsvArray.end())//少数。&& キーがある場合。
-		{
-			numfloat = atof(data.c_str());
-			float d = CsvArray[str] * numfloat;
-			if (d <= FLT_MIN || d >= FLT_MAX)
-			{
-				std::cout << "Error: too large a number. ->"<< d << std::endl;
-				continue;
-			}
-			else
-				std::cout << str << " => " << numfloat << " = " << d << std::endl;
-		}
-		if (find == CsvArray.end())
+		if (CheckDecimals(data) == false)//少数じゃない
+			IntPart(str, CsvArray, data);
+		else
+			FloatPart(str, CsvArray, data);
+		if (CsvArray.find(str) == CsvArray.end())//キーが無かった場合はここに来る
 		{
 			std::cout << "Error: bad input => " << str << std::endl;
 			continue;
 		}
-		if (FindMinus(data) == false)//マイナスがあったら。
-			{
-				std::cout << "Error: not a positive number." << std::endl;
-				continue;
-			}
 	}
 	file.close();
 }
