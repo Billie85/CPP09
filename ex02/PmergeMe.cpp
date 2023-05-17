@@ -72,7 +72,7 @@ void DeqPart(std::stringstream &ss)
 	}
 	std::deque<int>::iterator start = VecStr.begin();
 	//print(VecStr.begin(), VecStr.end(), "Before");
-	clock_t  STimeVec = clock();
+	clock_t  STimeVec = clock();//時間を計る必要があるから。sort関数の前と後ろに入れてあげてる。
 	Sort(start, VecStr.size());
 	clock_t  ETimeVec = clock();
 	double Total = (double)(ETimeVec - STimeVec) / CLOCKS_PER_SEC;//戻り値が整数だからdoubleにしてあげる必要がある。
