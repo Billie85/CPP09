@@ -12,6 +12,7 @@ int CheckSign(std::stack<int> &stack, std::string str)
 	}
 	else
 	{
+		//stackの一番上を取り出す。合計２つの数値を取り出す。
 		int n1 = stack.top();
 		stack.pop();
 		int n2 = stack.top();

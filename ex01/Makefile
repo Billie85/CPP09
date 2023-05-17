@@ -73,6 +73,14 @@ test15	: $(NAME)
 test16	: $(NAME)
 	./$(NAME) "(1 + 1)"
 
+#==========another test==========
+test17	: $(NAME)
+	./$(NAME) "5  6 - 1 3 * - 4 5 * * 8 2 + "
+
+test18	: $(NAME)
+	./$(NAME) "5 6 - 1 3 * 2 + 5 2 - * - 4 5 * * 8 /"
+#40
+
 clean	:
 		rm -f $(OBJS)
 

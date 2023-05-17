@@ -15,10 +15,12 @@ int main(int argc, char *argv[])
 	int result = 0;
 	while(ss >> str)
 	{
+		//記号だった場合
 		if (str == "+" || str == "-" || str == "*" || str == "/")
 		{
 			result = CheckSign(stack , str);
 		}
+		//数値は0~9までしか対応してはいけないから、長さはlength 1になる。&&絶対に数字の場合
 		else if (str.length() == 1 && str[0] <= '9' && str[0] >= '0')
 		{
 			num = std::atoi(str.c_str());
