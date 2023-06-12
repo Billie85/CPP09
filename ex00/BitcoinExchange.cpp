@@ -56,7 +56,7 @@ void IntPart(std::string &str, std::map<std::string, float> CsvArray, std::strin
 	std::map<std::string, float>::iterator find = CsvArray.find(str);//実際のデータの情報
 	if (find != CsvArray.end())//キーがある場合。
 		{
-			int num = atoi(data.c_str());
+			long num = atol(data.c_str());
 			float n = CsvArray[str] * num;
 			if (num >= 1000)
 				std::cout << "Error: too large a number. "<< std::endl;
