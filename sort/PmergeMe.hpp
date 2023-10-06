@@ -18,10 +18,19 @@
 #include <ctime>
 #include <iomanip>
 
+bool checkValueError(const std::string& arg);
+
 template <typename T>
-void Sort(T start, int len);
-template <typename T>
-void print(T start, T end, std::string str);
-void VecPart(std::stringstream &ss);
-void DeqPart(std::stringstream &ss);
+T pushToContainer(const std::string& value) {
+    T container;
+    std::istringstream array(value);
+    
+    int num;
+    while (array >> num) {
+        container.push_back(num);
+    }
+    
+    return container;
+}
+
 #endif
