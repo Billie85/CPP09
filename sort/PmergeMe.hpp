@@ -8,7 +8,6 @@
 #include <fstream>
 #include <sstream>
 #include <climits>
-#include <string>
 #include <vector>
 #include <string>
 #include <cctype> 
@@ -18,9 +17,28 @@
 #include <ctime>
 #include <iomanip>
 
-bool checkValueError(const std::string& arg);
 
+class PmergeMe {
+    public:
+    // コンストラクタ：デフォルトコンストラクタ
+    PmergeMe(void);
+
+    // コピーコンストラクタ
+    PmergeMe(const PmergeMe& other);
+
+    // 代入演算子
+    PmergeMe& operator=(const PmergeMe& other);
+
+    // デストラクタ
+    ~PmergeMe();
+    void sort(std::vector<int> &array);
+    private:
+};
+
+bool checkValueError(const std::string& arg);
 template <typename T>
+// istringstreamを使うと、リダイレクション記号（>>）
+// で文字列から簡単に数値を取り出すことができます。std::istringstream はデフォルトでスペースを区切り文字として使用し、数値が読み取れる限りスペースで区切って読み取ります
 T pushToContainer(const std::string& value) {
     T container;
     std::istringstream array(value);
@@ -29,8 +47,9 @@ T pushToContainer(const std::string& value) {
     while (array >> num) {
         container.push_back(num);
     }
-    
     return container;
 }
 
 #endif
+
+

@@ -1,13 +1,13 @@
 #include "PmergeMe.hpp"
 	
 	template <typename T>
-void Sort(T start, int len)
+void MargeSort(T start, int len)
 {
 	if (len <= 1)
 		return ;
 	T mid = start + len / 2;//真ん中を探してあげる。
-	Sort(start, len / 2);//前の部分をここで完全にソートする魔法の再帰
-	Sort(mid, len / 2 + len % 2);//後ろの部分をここで完全にソートする魔法の再帰,　奇数だった場合後ろの方が数が大きくなる。
+	MargeSort(start, len / 2);//前の部分をここで完全にソートする魔法の再帰
+	MargeSort(mid, len / 2 + len % 2);//後ろの部分をここで完全にソートする魔法の再帰,　奇数だった場合後ろの方が数が大きくなる。
 
 	//ここに入るときは　"7 8 9 10    1 2 3 4 5"　前と後ろが完全にソートされてる状態でfor文の中に入ってあげる。 
 	for (int i = len / 2; i < len; i++)
@@ -55,7 +55,7 @@ void VecPart(std::stringstream &ss)
 	
 	print(VecStr.begin(), VecStr.end(), "Before");
 	clock_t  STimeVec = clock();
-	Sort(start, VecStr.size());
+	MargeSort(start, VecStr.size());
 	clock_t  ETimeVec = clock();
 	double Total = (double)(ETimeVec - STimeVec) / CLOCKS_PER_SEC;//戻り値が整数だからdoubleにしてあげる必要がある。
 	print(VecStr.begin(), VecStr.end(), "After");
@@ -72,8 +72,8 @@ void DeqPart(std::stringstream &ss)
 	}
 	std::deque<int>::iterator start = VecStr.begin();
 	//print(VecStr.begin(), VecStr.end(), "Before");
-	clock_t  STimeVec = clock();//時間を計る必要があるから。sort関数の前と後ろに入れてあげてる。
-	Sort(start, VecStr.size());
+	clock_t  STimeVec = clock();//時間を計る必要があるから。MargeSort関数の前と後ろに入れてあげてる。
+	MargeSort(start, VecStr.size());
 	clock_t  ETimeVec = clock();
 	double Total = (double)(ETimeVec - STimeVec) / CLOCKS_PER_SEC;//戻り値が整数だからdoubleにしてあげる必要がある。
 	//print(VecStr.begin(), VecStr.end(), "After");

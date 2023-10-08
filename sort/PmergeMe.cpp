@@ -1,5 +1,29 @@
 #include "PmergeMe.hpp"
+
+//constructor
+PmergeMe::PmergeMe(void){ return; }
+
+PmergeMe::PmergeMe(const PmergeMe& other){ *this = other; }
+
+PmergeMe& PmergeMe::operator=(const PmergeMe& other){
+     // 自己代入チェック
+    if (this == &other) {
+        return *this;
+    }
+     return *this;
+}
+
+PmergeMe::~PmergeMe(void) { return; }
+
+///====================sort part==========================
+
+void PmergeMe::sort(std::vector<int> &array){
+    if (array.size() <= 1){
+        std::cout << "to small size" << std::endl;
+    }
+}
 	
+///====================check Error part==========================
 //引数が重複してるもしくは数字じゃないかどうかを確認してる。
 bool checkValueError(const std::string& arg){
 
