@@ -17,37 +17,52 @@ PmergeMe::~PmergeMe(void) { return; }
 
 ///====================sort part==========================
 
-void PmergeMe::sort(std::vector<int> &array){
-    if (array.size() <= 1){
-        std::cout << "to small size" << std::endl;
+void PmergeMe::sort(std::vector<int> &vectorArray) {
+    if (vectorArray.size() <= 1) {
+        std::cout << "size is " << vectorArray.size() << std::endl;
+        std::cout << "too small size" << std::endl;
+        return;
+    }
+
+    int remainder = 0;
+    // 奇数がどうかを見る。奇数だった場合vectorから最後の要素を取り出す。
+    if (vectorArray.size() % 2 != 0) {
+        remainder = vectorArray.back();
+        vectorArray.pop_back(); // ベクターから最後の要素を削除する。
+    }
+
+    std::vector<std::pair<int, int> > pairs;
+    for (size_t i = 0; i < vectorArray.size(); i += 2) {
+        if (vectorArray[i] < vectorArray[i + 1]) {
+            std::cout << "top " << std::make_pair(vectorArray[i + 1], vectorArray[i]) << std::endl;
+        } else {
+            std::cout << "bottom " << std::make_pair(vectorArray[i], vectorArray[i + 1]) << std::endl;
+        }
     }
 }
-	
-///====================check Error part==========================
-//引数が重複してるもしくは数字じゃないかどうかを確認してる。
-bool checkValueError(const std::string& arg){
 
-     // 文字列が数字のみで構成されていることを確認
-    for (size_t i = 0; i < arg.size(); i++) {
-        if (!isdigit(arg[i])) {
-            std::cout << "Argument Error: Only numbers are allowed." << std::endl;
+
+///====================check Error part==========================
+//引数が重複してるもしくは数字じゃないかどうかを確認してる。（引数のエラー確認）
+
+bool checkValueError(std::string arg) {
+    std::istringstream stream(arg);
+    std::string array;
+    std::vector<int> vectorArray;
+    
+    while (stream >> array) {
+        if (array.find_first_not_of("0123456789") != std::string::npos) {
+            std::cout << "Argument Error : Only Numbers" << std::endl;
             return false;
         }
-    }
-    std::vector<int> vectorArray;
-
-    // 文字列を一文字ずつ処理して重複を確認
-    for (size_t i = 0; i < arg.size(); i++) {
-        int digit = arg[i] - '0'; // 文字を数字に変換
-
-        // 重複する数字がベクターに存在する場合はエラーメッセージを表示して終了
-        for (size_t j = 0; j < vectorArray.size(); j++) {
-            if (vectorArray[j] == digit) {
-                std::cout << "Argument Error: Duplicate numbers are not allowed." << std::endl;
-                return false;
-            }
+        int num = std::atoi(array.c_str());
+        
+        // findFunctionを使用して重複を検出
+        if (findFunction(vectorArray.begin(), vectorArray.end(), num) != vectorArray.end()) {
+            std::cout << "Argument Error : Same value" << std::endl;
+            return false;
         }
-        vectorArray.push_back(digit);
+        vectorArray.push_back(num);
     }
     return true;
 }

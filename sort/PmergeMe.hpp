@@ -32,11 +32,35 @@ class PmergeMe {
     // デストラクタ
     ~PmergeMe();
     void sort(std::vector<int> &array);
+    
     private:
 };
 
-bool checkValueError(const std::string& arg);
+// テンプレート関数じゃない関数たち
+bool checkValueError(std::string arg);
+
+
+// ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝テンプレート関数＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+template <typename T1, typename T2>
+std::ostream& operator<<(std::ostream& os, const std::pair<T1, T2>& p) {
+    os << "(" << p.first << ", " << p.second << ")";
+    return os;
+}
+
+//重複しているかどうかを探す関数。
+template <typename array, typename T>
+array findFunction(array first, array last, const T& value) {
+    while (first != last) {
+        if (*first == value) {
+            return first;
+        }
+        ++first;
+    }
+    return last;
+}
+
 template <typename T>
+// コンテナに入れてあげる関数
 // istringstreamを使うと、リダイレクション記号（>>）
 // で文字列から簡単に数値を取り出すことができます。std::istringstream はデフォルトでスペースを区切り文字として使用し、数値が読み取れる限りスペースで区切って読み取ります
 T pushToContainer(const std::string& value) {
@@ -51,5 +75,3 @@ T pushToContainer(const std::string& value) {
 }
 
 #endif
-
-
