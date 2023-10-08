@@ -47,6 +47,8 @@ std::ostream& operator<<(std::ostream& os, const std::pair<T1, T2>& p) {
     return os;
 }
 
+
+
 //重複しているかどうかを探す関数。
 template <typename array, typename T>
 array findFunction(array first, array last, const T& value) {

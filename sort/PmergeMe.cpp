@@ -31,10 +31,12 @@ void PmergeMe::sort(std::vector<int> &vectorArray) {
         vectorArray.pop_back(); // ベクターから最後の要素を削除する。
     }
 
+    // ここからペアにしてあげるけど、基本的に左側が大きくと右側が小さいようにしたいから、
+    // 一個ずつ見てあげて、もしも左が右より小さかった時はmake_pairを使って大きい方を左にして小さい方を右に入れてペアにしていく。
     std::vector<std::pair<int, int> > pairs;
     for (size_t i = 0; i < vectorArray.size(); i += 2) {
         if (vectorArray[i] < vectorArray[i + 1]) {
-            std::cout << "top " << std::make_pair(vectorArray[i + 1], vectorArray[i]) << std::endl;
+            std::cout << "top" << std::make_pair(vectorArray[i + 1], vectorArray[i]) << std::endl;
         } else {
             std::cout << "bottom " << std::make_pair(vectorArray[i], vectorArray[i + 1]) << std::endl;
         }
