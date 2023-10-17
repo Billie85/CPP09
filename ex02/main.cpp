@@ -1,33 +1,18 @@
 #include "PmergeMe.hpp"
+#include <stdlib.h>
+int main(int argc, char *argv[]){
 
-int main(int argc, char *argv[])
-{
-	if (argc != 2)
-		std::cout << "Error" << std::endl;
-	else
+	std::vector<VectorUnit> arguments;
+	for (int i = 1; i < argc; i++)
 	{
-		std::stringstream ss(argv[1]);
-		VecPart(ss);
-		ss.clear();
-		ss.seekg(0);
-		DeqPart(ss);
+		int value = std::atoi(argv[i]);
+		arguments.push_back(VectorUnit(value));
 	}
+	VectorSort(arguments);
+	for (std::vector<VectorUnit>::iterator i = arguments.begin(); i != arguments.end(); i++)
+	{
+		std::cout<< *i <<", ";
+	}
+	std::cout<< std::endl;
 	return 0;
 }
-
-//3000ソートテスト用
-/* int main(void)
-{
-	system("shuf -i 1-100000 -n 3000 > tmp.txt");
-	std::ifstream input("tmp.txt");
-	std::stringstream s1;
-	s1 << input.rdbuf();
-	input.close();
-	VecPart(s1);
-	s1.clear();
-	s1.seekg(0);
-	DeqPart(s1);
-	input.clear();
-	//std::remove("tmp.txt");
-	return 0;
-} */

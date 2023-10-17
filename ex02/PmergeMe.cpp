@@ -1,81 +1,173 @@
 #include "PmergeMe.hpp"
+
+//========Constructor========
+
+VectorUnit::VectorUnit(){}//not use
+
+VectorUnit::VectorUnit(int value):MainNumber(value),ChildIndex(-1),prevOfset(0),Haspair(false){}
+
+VectorUnit::~VectorUnit(){}
+
+//============operator============
+VectorUnit &VectorUnit::operator=(const VectorUnit &other)
+{
+	if(this != &other)
+	{
+		this->MainNumber = other.MainNumber;
+		this->ChildIndex = other.ChildIndex;
+		this->prevOfset = other.prevOfset;
+		this->Haspair = other.Haspair;
+	}
+	return(*this);
+}
+bool operator>(const VectorUnit &a, const VectorUnit &b)
+{
+	return (a.MainNumber > b.MainNumber);
+}
+
+bool operator<(const VectorUnit &a, const VectorUnit &b)
+{
+	return (a.MainNumber < b.MainNumber);
+}
+
+std::ostream &operator<<(std::ostream &os, const VectorUnit &obj)
+{
+	os << obj.MainNumber;
+	return(os);
+}
+
+//=========function==============
+void divideIntoThree(std::vector<VectorUnit> &src, std::vector<VectorUnit> \
+	&destFront, std::vector<VectorUnit> &destBack, std::vector<VectorUnit> &remainder){
+		size_t len = src.size() / 2;
+		size_t i = 0;
+		for (; i < len; i++){
+			destFront.push_back(src[i]);
+		}
+		len *= 2;
+		for (; i < len; i++){
+			destBack.push_back(src[i]);
+		}
+		for (; i < src.size(); i++){
+			remainder.push_back(src[i]);
+		}
+}
+
+void SwapBigger(std::vector<VectorUnit> &Front, std::vector<VectorUnit> &Back)
+{
+	size_t len = Front.size();
+	for (size_t i = 0; i < len; i++)
+	{
+		if (Front[i] < Back[i])
+		{
+			VectorUnit buff = Front[i];
+			Front[i] = Back[i];
+			Back[i] = buff;
+		}
+	}
+}
+
+void Copy(std::vector<VectorUnit> &src, std::vector<VectorUnit> &dest){
 	
-	template <typename T>
-void MargeSort(T start, int len)
-{
-	if (len <= 1)
-		return ;
-	T mid = start + len / 2;//真ん中を探してあげる。
-	MargeSort(start, len / 2);//前の部分をここで完全にソートする魔法の再帰
-	MargeSort(mid, len / 2 + len % 2);//後ろの部分をここで完全にソートする魔法の再帰,　奇数だった場合後ろの方が数が大きくなる。
-
-	//ここに入るときは　"7 8 9 10    1 2 3 4 5"　前と後ろが完全にソートされてる状態でfor文の中に入ってあげる。 
-	for (int i = len / 2; i < len; i++)
-	{
-		for (int j = i; j && start[j - 1] > start[j]; j--)
-		{
-			std::swap(start[j - 1], start[j]);
-		}
-	}
-	return ;
-}
-
-	template <typename T>
-void print(T start, T end, std::string str)
-{
-	if (str == "Before")
-	{
-		std::cout << "Before: ";
-		for (T it = start; it != end; it++)
-		{
-			std::cout << *it << " ";
-		}
-		std::cout << std::endl;
-	}
-	else if (str == "After")
-	{
-		std::cout << "After:  ";
-		for (T it = start; it != end; it++)
-		{
-			std::cout << *it << " ";
-		}
-		std::cout << std::endl;
+	size_t len = src.size();
+	dest.clear();
+	dest.reserve(len);
+	for (size_t i = 0; i < len; i++){
+		VectorUnit buff = src[i].MainNumber;
+		buff.ChildIndex = i;
+		buff.prevOfset = i;
+		buff.Haspair = false;
+		dest.push_back(buff);
 	}
 }
 
-void VecPart(std::stringstream &ss)
-{
-	int tmp = 0;
-	std::vector<int> VecStr;
-	while(ss >> tmp)
+void SetHaspair(std::vector<VectorUnit> &target){
+	for (size_t i = 0; i < target.size(); i++)
 	{
-		VecStr.push_back(tmp);
+		target[i].Haspair = true;
 	}
-	std::vector<int>::iterator start = VecStr.begin();
+}
+
+std::vector<VectorUnit>::iterator BinarySearch(std::vector<VectorUnit> &target, VectorUnit &searchNumber, size_t len)
+{
+	std::vector<VectorUnit>::iterator left = target.begin();
+
+	while (len > 1) {
+		if (searchNumber < left[len/2]){
+			len /= 2;
+		}else{
+			left += len / 2;
+			len = len / 2 + len % 2;
+		}
+	}
+	if (searchNumber < *left || !len){
+		return(left);
+	}else{
+		return(left + 1);
+	}
+}
+
+// J(0) = 0
+// J(1) = 1
+// J(n) = J(n-1) + 2 * J(n-2) （n > 1）
+void openPair(std::vector<VectorUnit> &Src, std::vector<VectorUnit> &Front, std::vector<VectorUnit> &Back){
+	size_t i = 0;
 	
-	print(VecStr.begin(), VecStr.end(), "Before");
-	clock_t  STimeVec = clock();
-	MargeSort(start, VecStr.size());
-	clock_t  ETimeVec = clock();
-	double Total = (double)(ETimeVec - STimeVec) / CLOCKS_PER_SEC;//戻り値が整数だからdoubleにしてあげる必要がある。
-	print(VecStr.begin(), VecStr.end(), "After");
-	std::cout << "Time to process a range of " << VecStr.size() << " elements with std::[..] : " << std::fixed << std::setprecision(6) << Total << " us" << std::endl;
+	if (Src.size()){
+		size_t n1 = 1;
+		size_t n2 = 1;
+		size_t open = 1;
+		while(open){
+			for (; open ; i--){
+				while (Src[i].Haspair && open){
+					size_t ChildIndex = Src[i].ChildIndex;
+					Src[i] = Front[Src[i].prevOfset];
+					Src.insert(BinarySearch(Src, Back[ChildIndex], i),Back[ChildIndex]);
+					open--;
+				}
+				if (!i)
+					break;
+			}
+			size_t hoge = n1 + 2 * n2;
+			n2 = n1;
+			n1 = hoge;
+			hoge = n1 - n2;
+			size_t len = Src.size();
+			for (; i < len && open < hoge; i++){
+				if (Src[i].Haspair){
+					open++;
+					if (open >= hoge){
+						break;
+					}
+				}
+			}
+		}
+	}
 }
 
-void DeqPart(std::stringstream &ss)
+void VectorSort(std::vector<VectorUnit> &src)
 {
-	int tmp = 0;
-	std::deque<int> VecStr;
-	while(ss >> tmp)
-	{
-		VecStr.push_back(tmp);
+	if (src.size() <= 1){
+		return;
 	}
-	std::deque<int>::iterator start = VecStr.begin();
-	//print(VecStr.begin(), VecStr.end(), "Before");
-	clock_t  STimeVec = clock();//時間を計る必要があるから。MargeSort関数の前と後ろに入れてあげてる。
-	MargeSort(start, VecStr.size());
-	clock_t  ETimeVec = clock();
-	double Total = (double)(ETimeVec - STimeVec) / CLOCKS_PER_SEC;//戻り値が整数だからdoubleにしてあげる必要がある。
-	//print(VecStr.begin(), VecStr.end(), "After");
-	std::cout << "Time to process a range of " << VecStr.size() << " elements with std::[..] : " << std::fixed << std::setprecision(6) << Total << " us" << std::endl;
+	std::vector<VectorUnit> Front;
+	std::vector<VectorUnit> Back;
+	std::vector<VectorUnit> Remainder;
+
+	divideIntoThree(src, Front, Back, Remainder);
+	SwapBigger(Front, Back);
+	Copy(Front, src);
+	VectorSort(src);
+	SetHaspair(src);
+	openPair(src, Front, Back);
+	size_t i = Remainder.size();
+	while (i--){
+		src.insert(BinarySearch(src, Remainder[i], src.size()),Remainder[i]);
+	}
+
 }
+
+// void ListSort(std::list<VectorUnit> &src)
+// {
+
+// }
