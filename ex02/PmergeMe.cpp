@@ -2,14 +2,14 @@
 
 //========Constructor========
 
-VectorUnit::VectorUnit(){}//not use
+Unit::Unit(){}//not use
 
-VectorUnit::VectorUnit(int value):MainNumber(value),ChildIndex(-1),prevOfset(0),Haspair(false){}
+Unit::Unit(int value):MainNumber(value),ChildIndex(-1),prevOfset(0),Haspair(false){}
 
-VectorUnit::~VectorUnit(){}
+Unit::~Unit(){}
 
 //============operator============
-VectorUnit &VectorUnit::operator=(const VectorUnit &other)
+Unit &Unit::operator=(const Unit &other)
 {
 	if(this != &other)
 	{
@@ -20,25 +20,25 @@ VectorUnit &VectorUnit::operator=(const VectorUnit &other)
 	}
 	return(*this);
 }
-bool operator>(const VectorUnit &a, const VectorUnit &b)
+bool operator>(const Unit &a, const Unit &b)
 {
 	return (a.MainNumber > b.MainNumber);
 }
 
-bool operator<(const VectorUnit &a, const VectorUnit &b)
+bool operator<(const Unit &a, const Unit &b)
 {
 	return (a.MainNumber < b.MainNumber);
 }
 
-std::ostream &operator<<(std::ostream &os, const VectorUnit &obj)
+std::ostream &operator<<(std::ostream &os, const Unit &obj)
 {
 	os << obj.MainNumber;
 	return(os);
 }
 
 //=========function==============
-void divideIntoThree(std::vector<VectorUnit> &src, std::vector<VectorUnit> \
-	&destFront, std::vector<VectorUnit> &destBack, std::vector<VectorUnit> &remainder){
+void divideIntoThree(std::vector<Unit> &src, std::vector<Unit> \
+	&destFront, std::vector<Unit> &destBack, std::vector<Unit> &remainder){
 		size_t len = src.size() / 2;
 		size_t i = 0;
 		for (; i < len; i++){
@@ -53,27 +53,27 @@ void divideIntoThree(std::vector<VectorUnit> &src, std::vector<VectorUnit> \
 		}
 }
 
-void SwapBigger(std::vector<VectorUnit> &Front, std::vector<VectorUnit> &Back)
+void SwapBigger(std::vector<Unit> &Front, std::vector<Unit> &Back)
 {
 	size_t len = Front.size();
 	for (size_t i = 0; i < len; i++)
 	{
 		if (Front[i] < Back[i])
 		{
-			VectorUnit buff = Front[i];
+			Unit buff = Front[i];
 			Front[i] = Back[i];
 			Back[i] = buff;
 		}
 	}
 }
 
-void Copy(std::vector<VectorUnit> &src, std::vector<VectorUnit> &dest){
+void Copy(std::vector<Unit> &src, std::vector<Unit> &dest){
 	
 	size_t len = src.size();
 	dest.clear();
 	dest.reserve(len);
 	for (size_t i = 0; i < len; i++){
-		VectorUnit buff = src[i].MainNumber;
+		Unit buff = src[i].MainNumber;
 		buff.ChildIndex = i;
 		buff.prevOfset = i;
 		buff.Haspair = false;
@@ -81,16 +81,17 @@ void Copy(std::vector<VectorUnit> &src, std::vector<VectorUnit> &dest){
 	}
 }
 
-void SetHaspair(std::vector<VectorUnit> &target){
+void SetHaspair(std::vector<Unit> &target){
 	for (size_t i = 0; i < target.size(); i++)
 	{
 		target[i].Haspair = true;
 	}
 }
 
-std::vector<VectorUnit>::iterator BinarySearch(std::vector<VectorUnit> &target, VectorUnit &searchNumber, size_t len)
+std::vector<Unit>::iterator BinarySearch(std::vector<Unit> &target, Unit &searchNumber, size_t len)
 {
-	std::vector<VectorUnit>::iterator left = target.begin();
+	//std::vector<Unit>::iterator ここのイテレータでoperator[]が必要になる。
+	std::vector<Unit>::iterator left = target.begin();
 
 	while (len > 1) {
 		if (searchNumber < left[len/2]){
@@ -110,9 +111,11 @@ std::vector<VectorUnit>::iterator BinarySearch(std::vector<VectorUnit> &target, 
 // J(0) = 0
 // J(1) = 1
 // J(n) = J(n-1) + 2 * J(n-2) （n > 1）
-void openPair(std::vector<VectorUnit> &Src, std::vector<VectorUnit> &Front, std::vector<VectorUnit> &Back){
+void openPair(std::vector<Unit> &Src, std::vector<Unit> &Front, std::vector<Unit> &Back){
 	size_t i = 0;
 	
+
+	//std::list<Unit> ここのlistでoperator[]が必要になる。
 	if (Src.size()){
 		size_t n1 = 1;
 		size_t n2 = 1;
@@ -145,14 +148,14 @@ void openPair(std::vector<VectorUnit> &Src, std::vector<VectorUnit> &Front, std:
 	}
 }
 
-void VectorSort(std::vector<VectorUnit> &src)
+void VectorSort(std::vector<Unit> &src)
 {
 	if (src.size() <= 1){
 		return;
 	}
-	std::vector<VectorUnit> Front;
-	std::vector<VectorUnit> Back;
-	std::vector<VectorUnit> Remainder;
+	std::vector<Unit> Front;
+	std::vector<Unit> Back;
+	std::vector<Unit> Remainder;
 
 	divideIntoThree(src, Front, Back, Remainder);
 	SwapBigger(Front, Back);
@@ -167,7 +170,7 @@ void VectorSort(std::vector<VectorUnit> &src)
 
 }
 
-// void ListSort(std::list<VectorUnit> &src)
+// void ListSort(std::list<Unit> &src)
 // {
 
 // }
