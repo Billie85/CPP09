@@ -62,7 +62,7 @@ void openPair(Container &Src, Container &Front, Container &Back){
 			for (; open ; i--){
 				while (Src[i].Haspair && open){
 					size_t ChildIndex = Src[i].ChildIndex;
-					Src[i] = Front[Src[i].prevOfset];
+					Src[i] = Front[Src[i].prevOfset];//情報交換
 					Src.insert(BinarySearch(Src, Back[ChildIndex], i),Back[ChildIndex]);
 					open--;
 				}
@@ -127,14 +127,14 @@ void FordJohnsonAlgorithm(Container &src)
 	Container Back;
 	Container Remainder;
 
-	divideIntoThree(src, Front, Back, Remainder);
-	SwapBigger(Front, Back);
-	Copy(Front, src);
+	divideIntoThree(src, Front, Back, Remainder);//3つにただ分けてるだけ
+	SwapBigger(Front, Back); //分けたものを上の部分をおきい方にする
+	Copy(Front, src);//大きい方をコピー
 	FordJohnsonAlgorithm(src);
 	SetHaspair(src);
-	openPair(src, Front, Back);
-	size_t i = Remainder.size();
-	while (i--){
+	openPair(src, Front, Back);  //もうペアができなくなくなったら、ここに入って、オープンしていく
+	size_t i = Remainder.size(); 
+	while (i--){//あまりぶち込む
 		src.insert(BinarySearch(src, Remainder[i], src.size()),Remainder[i]);
 	}
 }
