@@ -2,6 +2,17 @@
 /////////////////////////////////////////// Templat Function /////////////////////////////////////////////////////////////////
 
 template <typename Container>
+int Count(const Container &src){
+	
+	int count = 0;
+	typename Container::const_iterator it;
+	for(it = src.begin(); it != src.end(); it++) {
+		count++;
+	}
+	return (count);
+}
+
+template <typename Container>
 void Copy(Container &src, Container &dest){
 	
 	size_t len = src.size();

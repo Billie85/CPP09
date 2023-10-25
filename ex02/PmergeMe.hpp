@@ -10,6 +10,8 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/time.h>
+#include <ctime>
+#include <cctype>
 
 class Unit
 {
@@ -80,10 +82,8 @@ class MyList : public std::list<T>{
 
 };
 
-
 //////////////////////////////////////////// Operator ////////////////////////////////////////////////////////////////
 
 bool operator>(const Unit &a, const Unit &b);
 bool operator<(const Unit &a, const Unit &b);
 std::ostream &operator<<(std::ostream &os, const Unit &other);
-
