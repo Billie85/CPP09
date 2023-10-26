@@ -62,39 +62,40 @@ typename Container::iterator BinarySearch(Container &target, Unit &searchNumber,
 
 template <typename Container>
 void openPair(Container &Src, Container &Front, Container &Back){
-	size_t i = 0;
-	
-	//std::list<Unit> ここのlistでoperator[]が必要になる。
-	if (Src.size()){
-		size_t n1 = 1;
-		size_t n2 = 1;
-		size_t open = 1;
-		while(open){
-			for (; open ; i--){
-				while (Src[i].Haspair && open){
-					size_t ChildIndex = Src[i].ChildIndex;
-					Src[i] = Front[Src[i].prevOfset];//情報交換
-					Src.insert(BinarySearch(Src, Back[ChildIndex], i),Back[ChildIndex]);
-					open--;
-				}
-				if (!i)
-					break;
-			}
-			size_t hoge = n1 + 2 * n2;
-			n2 = n1;
-			n1 = hoge;
-			hoge = n1 - n2;
-			size_t len = Src.size();
-			for (; i < len && open < hoge; i++){
-				if (Src[i].Haspair){
-					open++;
-					if (open >= hoge){
-						break;
-					}
-				}
-			}
-		}
-	}
+    size_t i = 0;
+    
+    //std::list<Unit> ここのlistでoperator[]が必要になる。
+    if (Src.size()){
+        size_t n1 = 1;
+        size_t n2 = 1;
+        size_t open = 1;
+        while(open){
+            for (; open ; i--){
+
+                while (Src[i].Haspair && open){
+                    size_t ChildIndex = Src[i].ChildIndex;
+                    Src[i] = Front[Src[i].prevOfset];//情報交換
+                    Src.insert(BinarySearch(Src, Back[ChildIndex], i),Back[ChildIndex]);
+                    open--;
+                }
+                if (!i)
+                    break;
+            }
+            size_t hoge = n1 + 2 * n2;
+            n2 = n1;
+            n1 = hoge;
+            hoge = n1 - n2;
+            size_t len = Src.size();
+            for (; true; i++){
+                if (Src[i].Haspair){
+                    open++;
+                }
+                if (open >= hoge || i + 1 >= len){
+                    break;
+                }
+            }
+        }
+    }
 }
 
 template <typename Container>
