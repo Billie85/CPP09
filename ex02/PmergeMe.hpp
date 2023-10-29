@@ -16,8 +16,9 @@
 class Unit
 {
 private:
-	Unit(); //not use private
+	//Unit(); //not use private
 public:
+	Unit(); //not use private
 	int MainNumber;
 	size_t ChildIndex; //ssize_t wanna use minus
 	size_t prevOfset; //maeno index no offset

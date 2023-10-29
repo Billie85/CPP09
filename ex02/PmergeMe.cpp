@@ -4,7 +4,7 @@
 
 Unit::Unit(){}//not use
 
-Unit::Unit(int value):MainNumber(value),ChildIndex(-1),prevOfset(0),Haspair(false){}
+Unit::Unit(int value):MainNumber(value),ChildIndex(-1),Haspair(false){}
 
 Unit::~Unit(){}
 
