@@ -20,8 +20,8 @@ private:
 public:
 	Unit(); //not use private
 	int MainNumber;
-	size_t ChildIndex; //ssize_t wanna use minus
-	size_t prevOfset; //maeno index no offset
+	size_t Index; //ssize_t wanna use minus
+	//size_t prevOfset; //maeno index no offset
 	bool Haspair; //tenkai saretaka
 	Unit(int value);
 	~Unit();

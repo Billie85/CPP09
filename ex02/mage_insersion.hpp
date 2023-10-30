@@ -39,17 +39,17 @@ void Copy(Container &front, Container &src){
 		//std::cout << "Frontの " << front[i].MainNumber << " をbuffにコピーしてる" << std::endl;
 
 		Unit buff = front[i].MainNumber;
-		buff.ChildIndex = i;// indexを作ってる。
-		buff.prevOfset = i; //いらない。
+		buff.Index = i;// indexを作ってる。
+		//buff.prevOfset = i; //いらない。
 		buff.Haspair = false;
 		src.push_back(buff);
 	}
 
-	//src にChildIndexgが渡されたか確認してる。
-// 	//std::cout << "ChildIndex src After: " << std::endl;
+	//src にIndexgが渡されたか確認してる。
+// 	//std::cout << "Index src After: " << std::endl;
 // 	for (size_t i = 0; i < len; i++) {
-//     int childIndex = src[i].ChildIndex;  // ChildIndex の値を取得
-//     //std::cout << "src[" << i << "].ChildIndex = " << childIndex << std::endl;
+//     int Index = src[i].Index;  // Index の値を取得
+//     //std::cout << "src[" << i << "].Index = " << Index << std::endl;
 // }
 }
 
@@ -94,25 +94,17 @@ template <typename Container>
 	//src -> 9 , Front -> 9 7 10 , Back -> 8 1 4
 void openPair(Container &src, Container &Front, Container &Back){
 
-static int callCount = 0;
-std::cout << std::endl;
-if (callCount == 0) {
-std::cout << "\033[31m"; // 赤色
-std::cout << "openPair に入った回数: " << ++callCount << std::endl;
-std::cout << "\033[0m";  // 色をリセット
-} else {
-callCount++;
-std::cout << "\033[31m"; // 緑色
-std::cout << "openPair に入った回数: " << callCount << std::endl;
-std::cout << "\033[0m";  // 色をリセット
-}
-
-	std::cout << "==src==" << std::endl;
-	for (size_t i = 0; i < src.size(); i++)
-	{
-		std::cout << "[" << src[i] << "]";
-	}
-	std::cout << std::endl;
+// static int callCount = 0;
+// std::cout << std::endl;
+// if (callCount == 0) {
+// std::cout << "\033[31m"; // 赤色
+// std::cout << "openPair に入った回数: " << ++callCount << std::endl;
+// std::cout << "\033[0m";  // 色をリセット
+// } else {
+// callCount++;
+// std::cout << "\033[31m"; // 緑色
+// std::cout << "openPair に入った回数: " << callCount << std::endl;
+// std::cout << "\033[0m";  // 色をリセット
 
     size_t i = 0;
     
@@ -126,17 +118,14 @@ std::cout << "\033[0m";  // 色をリセット
 				//src のサイズが0でない場合回る
         while(open){
             for (; open; i--){
-							// //std::cout << "i ->" <<  i << " の回数" << "open ->" <<  open << "の回数" << std::endl;
                 while (src[i].Haspair && open){
+                    size_t Index = src[i].Index;
+					//std::cout << "src[i].Index の中身 ->" << Index << " [" <<  src[i] << "]" << std::endl;
 
-										//1 2 0
-                    size_t ChildIndex = src[i].ChildIndex;
-										std::cout << "Child index " << "[" << ChildIndex << "]" << " src " << src[i] << std::endl;
+                    src[i] = Front[Index];//ここで、srcとfrontを入れ替える、srcをとってそこに、frontがはいる。そして０番目の子供
+					std::cout << "Front[Index] の中身 ->" << Front[Index] << " [" << Index <<  "]"<< std::endl;
 
-										std::cout << "prevOfset index " << "[" << src[i].prevOfset << "]" << " src " << src[i] << std::endl;
-                    src[i] = Front[src[i].prevOfset];//情報交換
-
-                    src.insert(BinarySearch(src, Back[ChildIndex], i),Back[ChildIndex]);
+                    src.insert(BinarySearch(src, Back[Index], i), Back[Index]);
                     open--;
                 }
                 if (!i)
@@ -250,10 +239,22 @@ for (size_t i = 0; i < remainder.size(); i++)
 
 
 
+const char *color[] = {"\033[31m", "\033[32m", "\033[33m", "\033[34m", "\033[35m", "\033[36m", "\033[37m"};
+size_t color_i = 0;
 
 template <typename Container>
 void FordJohnsonAlgorithm(Container &src)
 {
+size_t c_i = color_i % 7;
+color_i++;
+std::cout << color[c_i];
+
+std::cout << "==Init src== の中身 " << std::endl;
+for (size_t i = 0; i < src.size(); i++){
+	std::cout << "[" << src[i] << "]";
+}
+std::cout << std::endl;
+
 
 	if (src.size() <= 1){
 		//std::cout << std::endl;
@@ -270,7 +271,31 @@ void FordJohnsonAlgorithm(Container &src)
 	SwapBigger(Front, Back); //分けたものを上の部分をおきい方にする
 	Copy(Front, src);//大きい方をコピー
 
+std::cout << "==before src== の中身 " << std::endl;
+for (size_t i = 0; i < src.size(); i++){
+	std::cout << "[" << src[i] << "]";
+}
+std::cout << std::endl;
+
+std::cout << "==Front== の中身 " << std::endl;
+for (size_t i = 0; i < Front.size(); i++){
+	std::cout << "[" << Front[i] << "]";
+}
+std::cout << std::endl;
+
+std::cout << "==Back== の中身 " << std::endl;
+for (size_t i = 0; i < Back.size(); i++){
+	std::cout << "[" << Back[i] << "]";
+}
+std::cout << std::endl;
+
 	FordJohnsonAlgorithm(src);
+std::cout << color[c_i];
+std::cout << "==after src== の中身 " << std::endl;
+for (size_t i = 0; i < src.size(); i++){
+	std::cout << "[" << src[i] << "]";
+}
+std::cout << std::endl;
 
 	SetHaspair(src);
 	openPair(src, Front, Back);  //もうペアができなくなくなったら、ここに入って、オープンしていく

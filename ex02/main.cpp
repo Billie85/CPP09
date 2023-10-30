@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
 	// }
 	// std::cout << std::endl;
 
-	std::cout << "List After:  ";
+//	std::cout << "List After:  ";
  	MyList<Unit> ListArg;
 
 	for (int i = 1; i < argc; i++)
@@ -49,24 +49,24 @@ int main(int argc, char *argv[]){
 	// }
 	// std::cout << std::endl;
 
-	std::cout << "Vector After:  ";
- 	std::vector<Unit> VectorArg;
-
-	for (int i = 1; i < argc; i++)
-	{
-		int value = std::atoi(argv[i]);
-		VectorArg.push_back(Unit(value));
-	}
-	//clock_t VectorStartTime = clock();
-	FordJohnsonAlgorithm(VectorArg);
-	//clock_t VectorEndTime = clock();
-
-
-	for(std::vector<Unit>::iterator it = VectorArg.begin(); it != VectorArg.end(); it++){
-		std::cout<< *it <<" ";
-	}
-
-	std::cout << std::endl;
+//	std::cout << "Vector After:  ";
+// 	std::vector<Unit> VectorArg;
+//
+//	for (int i = 1; i < argc; i++)
+//	{
+//		int value = std::atoi(argv[i]);
+//		VectorArg.push_back(Unit(value));
+//	}
+//	//clock_t VectorStartTime = clock();
+//	FordJohnsonAlgorithm(VectorArg);
+//	//clock_t VectorEndTime = clock();
+//
+//
+//	for(std::vector<Unit>::iterator it = VectorArg.begin(); it != VectorArg.end(); it++){
+//		std::cout<< *it <<" ";
+//	}
+//
+//	std::cout << std::endl;
 	//double VectorTime = (//double)(VectorEndTime - VectorStartTime) / (CLOCKS_PER_SEC / 1000.0); // ミリ秒に変換
 	//std::cout << "Time to process a range of " << Count(ListArg) << " elements with std::[..] : " << VectorTime << "us" << std::endl;
 	//std::cout<< std::endl;

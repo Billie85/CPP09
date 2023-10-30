@@ -4,7 +4,7 @@
 
 Unit::Unit(){}//not use
 
-Unit::Unit(int value):MainNumber(value),ChildIndex(-1),Haspair(false){}
+Unit::Unit(int value):MainNumber(value),Index(-1),Haspair(false){}
 
 Unit::~Unit(){}
 
@@ -14,8 +14,8 @@ Unit &Unit::operator=(const Unit &other)
 	if(this != &other)
 	{
 		this->MainNumber = other.MainNumber;
-		this->ChildIndex = other.ChildIndex;
-		this->prevOfset = other.prevOfset;
+		this->Index = other.Index;
+		//this->prevOfset = other.prevOfset;
 		this->Haspair = other.Haspair;
 	}
 	return(*this);
